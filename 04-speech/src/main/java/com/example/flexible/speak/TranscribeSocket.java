@@ -138,6 +138,7 @@ public class TranscribeSocket extends WebSocketAdapter
    */
   @Override
   public void onNext(StreamingRecognizeResponse response) {
+   String token = null;
     List<StreamingRecognitionResult> results = response.getResultsList();
     if (results.size() < 1) {
       return;
@@ -151,8 +152,11 @@ public class TranscribeSocket extends WebSocketAdapter
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
       RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
       List<String> arguments = runtimeMxBean.getInputArguments();
-       logger.info("Token argument " + arguments.get(0));
-      post.addHeader("x-api-key", arguments.get(0));
+      if(arguments.get(0).split("=").length > 1){
+        token =  arguments.get(0).split("=")[1];
+        } 
+       logger.info("Token argument " + token);
+      post.addHeader("x-api-key", token);
       try {
         StringEntity entity = new StringEntity(transcript);
         post.setEntity(entity);
