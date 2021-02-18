@@ -1,18 +1,4 @@
-/**
- * Copyright 2017 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 package com.example.flexible.speak;
 
@@ -26,15 +12,29 @@ import com.google.cloud.speech.v1.StreamingRecognitionResult;
 import com.google.cloud.speech.v1.StreamingRecognizeRequest;
 import com.google.cloud.speech.v1.StreamingRecognizeResponse;
 import com.google.gson.Gson;
+import com.google.logging.type.HttpRequest;
 import com.google.protobuf.ByteString;
 import io.grpc.auth.ClientAuthInterceptor;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.message.BasicNameValuePair;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
+import org.apache.http.client.*;
+
 import java.io.IOException;
+
+import java.security.GeneralSecurityException;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -143,12 +143,24 @@ public class TranscribeSocket extends WebSocketAdapter
     try {
       StreamingRecognitionResult result = results.get(0);
       logger.info("Got result " + result);
-      //String transcript = result.getAlternatives(0).getTranscript();
-      getRemote().sendString(gson.toJson(result));
-    } catch (IOException e) {
+      String transcript = result.getAlternatives(0).getTranscript();
+      HttpClient client = new DefaultHttpClient();
+      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/project-id/agent/sessions/session-id:detectIntent");
+      try {
+        StringEntity entity = new StringEntity(transcript);
+        post.setEntity(entity);
+
+        HttpResponse res = client.execute(post);
+        logger.log(Level.INFO,"Response : " , res);
+        getRemote().sendString(gson.toJson(res));
+      } catch (IOException e) {
+        logger.log(Level.WARNING, "Error sending to websocket", e);
+      }
+    }catch (Exception e) {
       logger.log(Level.WARNING, "Error sending to websocket", e);
     }
   }
+
 
   /**
    * Called if the API call throws an error.
