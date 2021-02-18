@@ -145,7 +145,7 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.info("Got result " + result);
       String transcript = result.getAlternatives(0).getTranscript();
       HttpClient client = new DefaultHttpClient();
-      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/project-id/agent/sessions/session-id:detectIntent");
+      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
       try {
         StringEntity entity = new StringEntity(transcript);
         post.setEntity(entity);
