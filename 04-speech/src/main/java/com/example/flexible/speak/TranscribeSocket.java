@@ -175,7 +175,7 @@ public class TranscribeSocket extends WebSocketAdapter
      // } 
        
       logger.info("Token argument " + token);
-      post.addHeader("x-api-key", token);
+      post.addHeader("Authorization: Bearer", token);
       try {
         StringEntity entity = new StringEntity(transcript);
         post.setEntity(entity);
