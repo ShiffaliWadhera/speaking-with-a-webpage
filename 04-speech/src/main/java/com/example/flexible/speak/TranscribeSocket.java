@@ -161,18 +161,16 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.info("Transcript : " + transcript);
       HttpClient client = new DefaultHttpClient();
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
-      RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
-      List<String> arguments = runtimeMxBean.getInputArguments();
-      logger.info("arguments : " + arguments);
-      for(String args : arguments){
-        if(args != null && args.contains("token")){
-          if(args.split("=").length > 1) {
-            token = args.split("=")[1];
-          }
-        }
-      } 
+      
+      String userToken = System.getenv("token");
+      logger.info("Get env token : " + userToken);
+      
+      String val = System.getProperty("token");
+      logger.info("Get env property : " + val);      
+      
+      
        
-      logger.info("Token argument " + token);
+      
       post.addHeader("x-api-key", token);
       try {
         StringEntity entity = new StringEntity(transcript);
