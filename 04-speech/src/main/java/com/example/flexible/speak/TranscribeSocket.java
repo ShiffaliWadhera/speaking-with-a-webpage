@@ -159,7 +159,7 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.info("Got result :" + result);
       String transcript = result.getAlternatives(0).getTranscript();
       logger.info("Transcript : " + transcript);
-      String req = "{\"query_input\": {\"text\": {\"text\": \""+transcript+"\",\"language_code\": \"en-US\"}}}";
+      String req = "{\"query_input\":{\"text\":{\"text\": \""+transcript+"\",\"language_code\": \"en-US\"}}}";
       logger.info("Get env token : " + System.getenv("token"));
       logger.info("Get property token : " + System.getProperty("token"));
       HttpClient client = new DefaultHttpClient();
@@ -177,7 +177,7 @@ public class TranscribeSocket extends WebSocketAdapter
        
       logger.info("Token argument " + token);
       post.addHeader("Authorization", "Bearer " + token);
-      post.addHeader("Content-Type", "application/json; charset=utf-8");
+    //  post.addHeader("Content-Type", "application/json; charset=utf-8");
       try {
         StringEntity entity = new StringEntity(req);
         post.setEntity(entity);
