@@ -26,10 +26,24 @@ import com.google.cloud.speech.v1.StreamingRecognitionResult;
 import com.google.cloud.speech.v1.StreamingRecognizeRequest;
 import com.google.cloud.speech.v1.StreamingRecognizeResponse;
 import com.google.gson.Gson;
+import com.google.logging.type.HttpRequest;
 import com.google.protobuf.ByteString;
 import io.grpc.auth.ClientAuthInterceptor;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.message.BasicNameValuePair;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+import java.util.List;
+import org.apache.http.client.*;
+import java.security.GeneralSecurityException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -135,6 +149,7 @@ public class TranscribeSocket extends WebSocketAdapter
    */
   @Override
   public void onNext(StreamingRecognizeResponse response) {
+    String token = null;
     List<StreamingRecognitionResult> results = response.getResultsList();
     if (results.size() < 1) {
       return;
@@ -143,11 +158,27 @@ public class TranscribeSocket extends WebSocketAdapter
     try {
       StreamingRecognitionResult result = results.get(0);
       logger.info("Got result " + result);
-      //String transcript = result.getAlternatives(0).getTranscript();
-      getRemote().sendString(gson.toJson(result));
-    } catch (IOException e) {
+      String transcript = result.getAlternatives(0).getTranscript();
+      HttpClient client = new DefaultHttpClient();
+      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
+      RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+      List<String> arguments = runtimeMxBean.getInputArguments();
+      if(arguments.get(0).split("=").length > 1){
+      token =  arguments.get(0).split("=")[1];
+      }
+      logger.info("Token argument " + token);
+      post.addHeader("x-api-key", token);
+      try {
+        StringEntity entity = new StringEntity(transcript);
+        post.setEntity(entity);
+        HttpResponse res = client.execute(post);
+        logger.log(Level.INFO,"Response : " , res);
+        getRemote().sendString(gson.toJson(res));      
+      } catch (IOException e) {
       logger.log(Level.WARNING, "Error sending to websocket", e);
-    }
+    }catch (Exception e) {
+      logger.log(Level.WARNING, "Error sending to websocket", e);
+    }    
   }
 
   /**
