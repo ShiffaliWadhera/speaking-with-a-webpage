@@ -160,22 +160,15 @@ public class TranscribeSocket extends WebSocketAdapter
       String transcript = result.getAlternatives(0).getTranscript();
       logger.info("Transcript : " + transcript);
       HttpClient client = new DefaultHttpClient();
-      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
-      
+      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");      
       String userToken = System.getenv("token");
-      logger.info("Get env token : " + userToken);
-      
+      logger.info("Get env token : " + userToken);      
       String val = System.getProperty("token");
       logger.info("Get env property : " + val);      
-      
-      
-       
-      
       post.addHeader("x-api-key", token);
       try {
         StringEntity entity = new StringEntity(transcript);
         post.setEntity(entity);
-
         HttpResponse res = client.execute(post);
         logger.log(Level.INFO,"Response : " , res);
         getRemote().sendString(gson.toJson(res));
