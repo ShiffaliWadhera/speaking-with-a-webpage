@@ -162,10 +162,6 @@ public class TranscribeSocket extends WebSocketAdapter
       HttpClient client = new DefaultHttpClient();
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
       RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
-	  String userToken = System.getenv("token");
-      logger.info("Get env token : " + userToken);      
-      String val = System.getProperty("token");
-      logger.info("Get env property : " + val);
       List<String> arguments = runtimeMxBean.getInputArguments();
       logger.info("arguments : " + arguments);
       for(String args : arguments){
@@ -192,7 +188,8 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.log(Level.WARNING, "Error sending to websocket", e);
     }
   }
-  
+
+
   /**
    * Called if the API call throws an error.
    */
