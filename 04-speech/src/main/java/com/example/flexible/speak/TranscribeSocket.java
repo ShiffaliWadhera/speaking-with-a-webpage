@@ -162,6 +162,7 @@ public class TranscribeSocket extends WebSocketAdapter
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
       RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
       List<String> arguments = runtimeMxBean.getInputArguments();
+      logger.log(Level.INFO,"TOKEN : " , arguments.get(token));
       if(arguments.get(0).split("=").length > 1){
         token =  arguments.get(0).split("=")[1];
         } 
