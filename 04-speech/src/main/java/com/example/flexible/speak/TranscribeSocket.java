@@ -148,7 +148,7 @@ public class TranscribeSocket extends WebSocketAdapter
    */
   @Override
   public void onNext(StreamingRecognizeResponse response) {
-   String token = null;
+   String token = System.getProperty("token");
     List<StreamingRecognitionResult> results = response.getResultsList();
     if (results.size() < 1) {
       return;
@@ -163,16 +163,16 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.info("Get property token : " + System.getProperty("token"));
       HttpClient client = new DefaultHttpClient();
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
-      RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
-      List<String> arguments = runtimeMxBean.getInputArguments();
-      logger.info("arguments : " + arguments);
-      for(String args : arguments){
-        if(args != null && args.contains("token")){
-          if(args.split("=").length > 1) {
-            token = args.split("=")[1];
-          }
-        }
-      } 
+      //RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+      //List<String> arguments = runtimeMxBean.getInputArguments();
+      //logger.info("arguments : " + arguments);
+      //for(String args : arguments){
+       // if(args != null && args.contains("token")){
+        //  if(args.split("=").length > 1) {
+         //   token = args.split("=")[1];
+     //     }
+     //   }
+     // } 
        
       logger.info("Token argument " + token);
       post.addHeader("x-api-key", token);
