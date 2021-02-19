@@ -143,13 +143,12 @@ public class TranscribeSocket extends WebSocketAdapter
     closeApiChannel();
   }
 
-
-  /**
+/**
    * Called when the Speech API has a transcription result for us.
    */
   @Override
   public void onNext(StreamingRecognizeResponse response) {
-    String token = null;
+   String token = null;
     List<StreamingRecognitionResult> results = response.getResultsList();
     if (results.size() < 1) {
       return;
@@ -164,22 +163,25 @@ public class TranscribeSocket extends WebSocketAdapter
       RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
       List<String> arguments = runtimeMxBean.getInputArguments();
       if(arguments.get(0).split("=").length > 1){
-      token =  arguments.get(0).split("=")[1];
-      }
-      logger.info("Token argument " + token);
+        token =  arguments.get(0).split("=")[1];
+        } 
+       logger.info("Token argument " + token);
       post.addHeader("x-api-key", token);
       try {
         StringEntity entity = new StringEntity(transcript);
         post.setEntity(entity);
+
         HttpResponse res = client.execute(post);
         logger.log(Level.INFO,"Response : " , res);
-        getRemote().sendString(gson.toJson(res));      
+        getRemote().sendString(gson.toJson(res));
       } catch (IOException e) {
-      logger.log(Level.WARNING, "Error sending to websocket", e);
+        logger.log(Level.WARNING, "Error sending to websocket", e);
+      }
     }catch (Exception e) {
       logger.log(Level.WARNING, "Error sending to websocket", e);
-    }    
+    }
   }
+
 
   /**
    * Called if the API call throws an error.
