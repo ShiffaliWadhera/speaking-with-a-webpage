@@ -160,15 +160,28 @@ public class TranscribeSocket extends WebSocketAdapter
       String transcript = result.getAlternatives(0).getTranscript();
       logger.info("Transcript : " + transcript);
       HttpClient client = new DefaultHttpClient();
-      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");      
-      String userToken = System.getenv("token");
+      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
+      RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+	  String userToken = System.getenv("token");
       logger.info("Get env token : " + userToken);      
       String val = System.getProperty("token");
-      logger.info("Get env property : " + val);      
+      logger.info("Get env property : " + val);
+      List<String> arguments = runtimeMxBean.getInputArguments();
+      logger.info("arguments : " + arguments);
+      for(String args : arguments){
+        if(args != null && args.contains("token")){
+          if(args.split("=").length > 1) {
+            token = args.split("=")[1];
+          }
+        }
+      } 
+       
+      logger.info("Token argument " + token);
       post.addHeader("x-api-key", token);
       try {
         StringEntity entity = new StringEntity(transcript);
         post.setEntity(entity);
+
         HttpResponse res = client.execute(post);
         logger.log(Level.INFO,"Response : " , res);
         getRemote().sendString(gson.toJson(res));
@@ -179,8 +192,7 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.log(Level.WARNING, "Error sending to websocket", e);
     }
   }
-
-
+  
   /**
    * Called if the API call throws an error.
    */
