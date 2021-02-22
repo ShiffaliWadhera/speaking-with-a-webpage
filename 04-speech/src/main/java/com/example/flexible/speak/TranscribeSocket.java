@@ -161,66 +161,36 @@ public class TranscribeSocket extends WebSocketAdapter
       StreamingRecognitionResult result = results.get(0);
       logger.info("Got result :" + result);
       String transcript = result.getAlternatives(0).getTranscript();
-      logger.info("Transcript : " + transcript);
- //       String req = "\\{\"query_input\":\\{\"text\":\\{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"\\}\\}\\}";
-//      logger.info("req  is : " + req );
-      
+      logger.info("Transcript : " + transcript); 
       JSONObject innerObject1 = new JSONObject();
       innerObject1.put("text", transcript);
       innerObject1.put("language_code", "en-US");
-
       JSONObject innerObject2 = new JSONObject();
       innerObject2.put("text", innerObject1);
-
       JSONObject jsonObject = new JSONObject();
-      jsonObject.put("query_input", innerObject2);      
-      
+      jsonObject.put("query_input", innerObject2);       
       
       logger.info("JSON Object  is : " + jsonObject );
-      //logger.info("Request req is : " + req);
-      //String jsonInString = new Gson().toJson("{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}");
-      //logger.info("Request Json is : " + jsonInString);
-      //logger.info("Get property token : " + System.getProperty("token"));
+      
       HttpClient client = new DefaultHttpClient();
-      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
-      //RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
-      //List<String> arguments = runtimeMxBean.getInputArguments();
-      //logger.info("arguments : " + arguments);
-      //for(String args : arguments){
-       // if(args != null && args.contains("token")){
-        //  if(args.split("=").length > 1) {
-         //   token = args.split("=")[1];
-     //     }
-     //   }
-     // } 
+      HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");      
        
       logger.info("Token argument " + token);
       post.addHeader("Authorization", "Bearer " + token);
-      post.addHeader("Content-Type", "application/json");
-     // post.addHeader("charset", "utf-8");
+      post.addHeader("Content-Type", "application/json");    
       post.addHeader("Content-Type", "application/json; charset=utf-8");
-      try {
-        String str1 = "test";  
+      try {       
         StringEntity entity = new StringEntity(jsonObject.toString());
         post.setEntity(entity);
 
         HttpResponse res = client.execute(post);
-        logger.info("Received response1" + res.getStatusLine());
+        logger.info("HTTP response code: " + res.getStatusLine());
         HttpEntity entity1 = res.getEntity();
         String result2 = EntityUtils.toString(entity1);
         
-        logger.info("Received response2" + result2);      
+        logger.info("Dialogflow response: " + result2);       
+        getRemote().sendString(gson.toJson(result));       
         
-        
-        if (res == null){
-        logger.info("Received null response from dialogflow");
-        } 
-        else {
-        str1 = result2;
-        
-        logger.info("Received response" + res.toString());
-        }        
-        getRemote().sendString(str1);
       } catch (IOException e) {
         logger.log(Level.WARNING, "Error sending to websocket", e);
       }
