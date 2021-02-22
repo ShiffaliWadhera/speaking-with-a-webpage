@@ -16,7 +16,7 @@
 
 package com.example.flexible.speak;
 
-import javax.json.JSONObject;
+import org.json.JSONObject;
 
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
@@ -196,7 +196,7 @@ public class TranscribeSocket extends WebSocketAdapter
       post.addHeader("Authorization", "Bearer " + token);
     //  post.addHeader("Content-Type", "application/json; charset=utf-8");
       try {
-        StringEntity entity = new StringEntity(jsonObject);
+        StringEntity entity = new StringEntity(jsonObject.toString());
         post.setEntity(entity);
 
         HttpResponse res = client.execute(post);
