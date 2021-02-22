@@ -205,12 +205,14 @@ public class TranscribeSocket extends WebSocketAdapter
 
         HttpResponse res = client.execute(post);
         logger.log(Level.INFO,"Response : " , res);
+        res.getStatusLine();
+        res.getParams();
         if (res == null){
         logger.info("Received null response from dialogflow");
         } 
         else {
         str1 = res.toString();
-        logger.info(res.toString());
+        logger.info("Received response" + res.toString());
         }        
         getRemote().sendString(str1);
       } catch (IOException e) {
