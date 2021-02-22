@@ -16,6 +16,8 @@
 
 package com.example.flexible.speak;
 
+import javax.json.JSONObject;
+
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.cloud.speech.v1.RecognitionConfig;
@@ -159,12 +161,24 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.info("Got result :" + result);
       String transcript = result.getAlternatives(0).getTranscript();
       logger.info("Transcript : " + transcript);
-      String req = "{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}";
-      logger.info("Request req is : " + "{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}");
+      //String req = "{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}";
+      
+      JSONObject innerObject1 = new JSONObject();
+      innerObject1.put("text", transcript);
+      innerObject1.put("language_code", "en-US");
+
+      JSONObject innerObject2 = new JSONObject();
+      innerObject2.put("text", innerObject1);
+
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("query_input", innerObject2);      
+      
+      
+      logger.info("JSON Object  is : " + jsonObject );
       //logger.info("Request req is : " + req);
-      String jsonInString = new Gson().toJson("{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}");
-      logger.info("Request Json is : " + jsonInString);
-      logger.info("Get property token : " + System.getProperty("token"));
+      //String jsonInString = new Gson().toJson("{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}");
+      //logger.info("Request Json is : " + jsonInString);
+      //logger.info("Get property token : " + System.getProperty("token"));
       HttpClient client = new DefaultHttpClient();
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
       //RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
@@ -182,7 +196,7 @@ public class TranscribeSocket extends WebSocketAdapter
       post.addHeader("Authorization", "Bearer " + token);
     //  post.addHeader("Content-Type", "application/json; charset=utf-8");
       try {
-        StringEntity entity = new StringEntity(jsonInString);
+        StringEntity entity = new StringEntity(jsonObject);
         post.setEntity(entity);
 
         HttpResponse res = client.execute(post);
