@@ -199,27 +199,27 @@ public class TranscribeSocket extends WebSocketAdapter
      // post.addHeader("charset", "utf-8");
       post.addHeader("Content-Type", "application/json; charset=utf-8");
       try {
-        String default = "test";  
+        String str1 = "test";  
         StringEntity entity = new StringEntity(req);
         post.setEntity(entity);
 
         HttpResponse res = client.execute(post);
         logger.log(Level.INFO,"Response : " , res);
         if (res == null){
-        logger.log((Level.WARNING, "Received null response from dialogflow");
+        logger.info("Received null response from dialogflow");
         } 
         else {
-        default = res.getBody();
-        logger.log((Level.WARNING, res.getBody());
+        str1 = res.toString();
+        logger.info(res.toString());
         }        
-        getRemote().sendString(default);
+        getRemote().sendString(str1);
       } catch (IOException e) {
         logger.log(Level.WARNING, "Error sending to websocket", e);
       }
     }catch (Exception e) {
       logger.log(Level.WARNING, "Error sending to websocket", e);
     }
-  }
+  } 
 
 
   /**
