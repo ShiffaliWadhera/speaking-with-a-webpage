@@ -162,21 +162,21 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.info("Got result :" + result);
       String transcript = result.getAlternatives(0).getTranscript();
       logger.info("Transcript : " + transcript);
-      String req = "\\{\"query_input\":\\{\"text\":\\{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"\\}\\}\\}";
-      logger.info("req  is : " + req );
+ //       String req = "\\{\"query_input\":\\{\"text\":\\{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"\\}\\}\\}";
+//      logger.info("req  is : " + req );
       
-//      JSONObject innerObject1 = new JSONObject();
-//      innerObject1.put("text", transcript);
-//      innerObject1.put("language_code", "en-US");
-//
-//      JSONObject innerObject2 = new JSONObject();
-//      innerObject2.put("text", innerObject1);
-//
-//      JSONObject jsonObject = new JSONObject();
-//      jsonObject.put("query_input", innerObject2);      
-//      
-//      
-//      logger.info("JSON Object  is : " + jsonObject );
+      JSONObject innerObject1 = new JSONObject();
+      innerObject1.put("text", transcript);
+      innerObject1.put("language_code", "en-US");
+
+      JSONObject innerObject2 = new JSONObject();
+      innerObject2.put("text", innerObject1);
+
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("query_input", innerObject2);      
+      
+      
+      logger.info("JSON Object  is : " + jsonObject );
       //logger.info("Request req is : " + req);
       //String jsonInString = new Gson().toJson("{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}");
       //logger.info("Request Json is : " + jsonInString);
@@ -201,7 +201,7 @@ public class TranscribeSocket extends WebSocketAdapter
       post.addHeader("Content-Type", "application/json; charset=utf-8");
       try {
         String str1 = "test";  
-        StringEntity entity = new StringEntity(req);
+        StringEntity entity = new StringEntity(jsonObject.toString());
         post.setEntity(entity);
 
         HttpResponse res = client.execute(post);
