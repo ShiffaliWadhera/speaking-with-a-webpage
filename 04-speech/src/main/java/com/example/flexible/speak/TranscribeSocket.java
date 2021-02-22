@@ -188,8 +188,16 @@ public class TranscribeSocket extends WebSocketAdapter
         HttpEntity entity1 = res.getEntity();
         String result2 = EntityUtils.toString(entity1);
         
-        logger.info("Dialogflow response: " + result2);       
-        getRemote().sendString(gson.toJson(result));       
+        logger.info("Dialogflow response: " + result2);
+        if (result2.contains("account.balance.check"))
+        {
+        	int index1 = result2.indexOf("fulfillmentText");
+        	int index2 = result2.indexOf("fulfillmentMessages");
+        	fulresp = result2.substring(index1+19, index2);
+        	logger.info("Fulfillment response: " + fulresp);
+        }
+        getRemote().sendString(gson.toJson(result));
+        getRemote().sendString(gson.toJson(fulresp)); 
         
       } catch (IOException e) {
         logger.log(Level.WARNING, "Error sending to websocket", e);
