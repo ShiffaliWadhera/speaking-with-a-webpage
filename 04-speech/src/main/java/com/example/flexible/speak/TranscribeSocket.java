@@ -53,6 +53,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.http.util.EntityUtils;
 
 public class TranscribeSocket extends WebSocketAdapter
     implements ApiStreamObserver<StreamingRecognizeResponse> {
@@ -204,14 +205,19 @@ public class TranscribeSocket extends WebSocketAdapter
         post.setEntity(entity);
 
         HttpResponse res = client.execute(post);
-        logger.log(Level.INFO,"Response : " , res);
-        res.getStatusLine();
-        res.getParams();
+        logger.info("Received response1" + res.getStatusLine());
+        HttpEntity entity1 = res.getEntity();
+        String result2 = EntityUtils.toString(entity1);
+        
+        logger.info("Received response2" + result2);      
+        
+        
         if (res == null){
         logger.info("Received null response from dialogflow");
         } 
         else {
-        str1 = res.toString();
+        str1 = result2;
+        
         logger.info("Received response" + res.toString());
         }        
         getRemote().sendString(str1);
@@ -222,7 +228,6 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.log(Level.WARNING, "Error sending to websocket", e);
     }
   } 
-
 
   /**
    * Called if the API call throws an error.
