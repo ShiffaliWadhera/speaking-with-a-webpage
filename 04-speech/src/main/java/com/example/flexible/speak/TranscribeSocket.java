@@ -162,7 +162,7 @@ public class TranscribeSocket extends WebSocketAdapter
       String req = "{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}";
       logger.info("Request req is : " + "{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}");
       //logger.info("Request req is : " + req);
-      String jsonInString = new Gson().toJson(req);
+      String jsonInString = new Gson().toJson("{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}");
       logger.info("Request Json is : " + jsonInString);
       logger.info("Get property token : " + System.getProperty("token"));
       HttpClient client = new DefaultHttpClient();
