@@ -160,7 +160,7 @@ public class TranscribeSocket extends WebSocketAdapter
       String transcript = result.getAlternatives(0).getTranscript();
       logger.info("Transcript : " + transcript);
       String req = "{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}";
-      logger.info("Get env token : " + System.getenv("token"));
+      logger.info("Request Json is : " + req);
       logger.info("Get property token : " + System.getProperty("token"));
       HttpClient client = new DefaultHttpClient();
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
