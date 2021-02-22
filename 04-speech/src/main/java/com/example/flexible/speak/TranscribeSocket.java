@@ -161,6 +161,8 @@ public class TranscribeSocket extends WebSocketAdapter
       logger.info("Transcript : " + transcript);
       String req = "{\"query_input\":{\"text\":{\"text\":\""+transcript+"\",\"language_code\":\"en-US\"}}}";
       logger.info("Request Json is : " + req);
+      String jsonInString = new Gson().toJson(req);
+      logger.info("Request Json is : " + jsonInString);
       logger.info("Get property token : " + System.getProperty("token"));
       HttpClient client = new DefaultHttpClient();
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");
@@ -179,7 +181,7 @@ public class TranscribeSocket extends WebSocketAdapter
       post.addHeader("Authorization", "Bearer " + token);
     //  post.addHeader("Content-Type", "application/json; charset=utf-8");
       try {
-        StringEntity entity = new StringEntity(req);
+        StringEntity entity = new StringEntity(jsonInString);
         post.setEntity(entity);
 
         HttpResponse res = client.execute(post);
