@@ -195,14 +195,24 @@ public class TranscribeSocket extends WebSocketAdapter
        
       logger.info("Token argument " + token);
       post.addHeader("Authorization", "Bearer " + token);
-    //  post.addHeader("Content-Type", "application/json; charset=utf-8");
+      post.addHeader("Content-Type", "application/json");
+     // post.addHeader("charset", "utf-8");
+      post.addHeader("Content-Type", "application/json; charset=utf-8");
       try {
+        String default = "test";  
         StringEntity entity = new StringEntity(req);
         post.setEntity(entity);
 
         HttpResponse res = client.execute(post);
         logger.log(Level.INFO,"Response : " , res);
-        getRemote().sendString(gson.toJson(res));
+        if (res == null){
+        logger.log((Level.WARNING, "Received null response from dialogflow");
+        } 
+        else {
+        default = res.getBody();
+        logger.log((Level.WARNING, res.getBody());
+        }        
+        getRemote().sendString(default);
       } catch (IOException e) {
         logger.log(Level.WARNING, "Error sending to websocket", e);
       }
