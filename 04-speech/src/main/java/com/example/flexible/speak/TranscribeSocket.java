@@ -152,6 +152,7 @@ public class TranscribeSocket extends WebSocketAdapter
   @Override
   public void onNext(StreamingRecognizeResponse response) {
    String token = System.getProperty("token");
+   String fulresp = "";
     List<StreamingRecognitionResult> results = response.getResultsList();
     if (results.size() < 1) {
       return;
