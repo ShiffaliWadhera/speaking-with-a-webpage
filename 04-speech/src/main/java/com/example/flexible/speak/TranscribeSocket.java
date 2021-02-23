@@ -141,9 +141,7 @@ public class TranscribeSocket extends WebSocketAdapter
    */
   @Override
   public void onNext(StreamingRecognizeResponse response) {
-   String fulresp = "";
-   String quText = "";
-   String token = System.getProperty("token");
+    String token = System.getProperty("token");
     List<StreamingRecognitionResult> results = response.getResultsList();
     if (results.size() < 1) {
       return;
@@ -161,9 +159,9 @@ public class TranscribeSocket extends WebSocketAdapter
     {    
     	logger.info("Transcript : " + transcript);    
 
-    try {     
+    try { 
       
-      getRemote().sendString(gson.toJson(transcript));
+      getRemote().sendString(transcript);
       JSONObject innerObject1 = new JSONObject();
       innerObject1.put("text", transcript);
       innerObject1.put("language_code", "en-US");
