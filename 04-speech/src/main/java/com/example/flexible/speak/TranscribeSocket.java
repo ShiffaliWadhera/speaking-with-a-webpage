@@ -195,7 +195,8 @@ public class TranscribeSocket extends WebSocketAdapter
         JSONObject object = new JSONObject(tokener);
         JSONObject qresult = object.getJSONObject("queryResult");       
         
-        logger.info("fulfillmentText  : " + qresult.getString("fulfillmentText"));   
+        logger.info("fulfillmentText  : " + qresult.getString("fulfillmentText")); 
+        getRemote().sendString(qresult.getString("fulfillmentText"));
         
 
         
