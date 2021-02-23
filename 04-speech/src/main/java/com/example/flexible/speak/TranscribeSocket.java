@@ -160,8 +160,8 @@ public class TranscribeSocket extends WebSocketAdapter
     	logger.info("Transcript : " + transcript);    
 
     try { 
-      
-      getRemote().sendString(transcript);
+      getRemote().sendString(gson.toJson(result));
+      //getRemote().sendString(transcript);
       JSONObject innerObject1 = new JSONObject();
       innerObject1.put("text", transcript);
       innerObject1.put("language_code", "en-US");
