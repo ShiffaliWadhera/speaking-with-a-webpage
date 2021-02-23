@@ -196,10 +196,9 @@ public class TranscribeSocket extends WebSocketAdapter
         JSONObject qresult = object.getJSONObject("queryResult");       
         
         logger.info("fulfillmentText  : " + qresult.getString("fulfillmentText")); 
-        getRemote().sendString(qresult.getString("fulfillmentText"));
-        
-
-        
+        getRemote().sendString(gson.toJson(qresult));
+        getRemote().sendString(gson.toJson(qresult.getString("fulfillmentText")));
+               
       } catch (IOException e) {
         logger.log(Level.WARNING, "Error sending to websocket", e);
       }
