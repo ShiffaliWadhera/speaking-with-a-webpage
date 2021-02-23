@@ -28,29 +28,17 @@ import com.google.cloud.speech.v1.StreamingRecognitionResult;
 import com.google.cloud.speech.v1.StreamingRecognizeRequest;
 import com.google.cloud.speech.v1.StreamingRecognizeResponse;
 import com.google.gson.Gson;
-import com.google.logging.type.HttpRequest;
 import com.google.protobuf.ByteString;
-import io.grpc.auth.ClientAuthInterceptor;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.message.BasicNameValuePair;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.util.List;
 import org.apache.http.client.*;
-import java.security.GeneralSecurityException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.http.util.EntityUtils;
@@ -151,17 +139,29 @@ public class TranscribeSocket extends WebSocketAdapter
    */
   @Override
   public void onNext(StreamingRecognizeResponse response) {
+   String fulresp = "";
+   String quText = "";
    String token = System.getProperty("token");
     List<StreamingRecognitionResult> results = response.getResultsList();
     if (results.size() < 1) {
       return;
     }
+    
+   
+//    StreamingRecognizeResponse result = results.getResultsList.get(0);
+    StreamingRecognitionResult result = results.get(0);
+    logger.info("Got result :" + result);
+    boolean isfinal = result.getIsFinal();
+    String transcript = result.getAlternatives(0).getTranscript();
+    
+    
+    if (isfinal==true)
+    {    
+    	logger.info("Transcript : " + transcript);    
 
-    try {
-      StreamingRecognitionResult result = results.get(0);
-      logger.info("Got result :" + result);
-      String transcript = result.getAlternatives(0).getTranscript();
-      logger.info("Transcript : " + transcript); 
+    try {     
+      
+      
       JSONObject innerObject1 = new JSONObject();
       innerObject1.put("text", transcript);
       innerObject1.put("language_code", "en-US");
@@ -170,7 +170,7 @@ public class TranscribeSocket extends WebSocketAdapter
       JSONObject jsonObject = new JSONObject();
       jsonObject.put("query_input", innerObject2);       
       
-      logger.info("JSON Object  is : " + jsonObject );
+//      logger.info("JSON Object  is : " + jsonObject );
       
       HttpClient client = new DefaultHttpClient();
       HttpPost post = new HttpPost("https://dialogflow.googleapis.com/v2/projects/gold-freedom-304212/agent/sessions/12345:detectIntent");      
@@ -179,7 +179,7 @@ public class TranscribeSocket extends WebSocketAdapter
       post.addHeader("Authorization", "Bearer " + token);
       post.addHeader("Content-Type", "application/json");    
       post.addHeader("Content-Type", "application/json; charset=utf-8");
-      try {       
+             
         StringEntity entity = new StringEntity(jsonObject.toString());
         post.setEntity(entity);
 
@@ -188,17 +188,17 @@ public class TranscribeSocket extends WebSocketAdapter
         HttpEntity entity1 = res.getEntity();
         String result2 = EntityUtils.toString(entity1);
         
-        logger.info("Dialogflow response: " + result2);       
-        getRemote().sendString(gson.toJson(result));       
-        
+        logger.info("Dialogflow response: " + result2);
+
+        getRemote().sendString(gson.toJson(transcript));
       } catch (IOException e) {
         logger.log(Level.WARNING, "Error sending to websocket", e);
       }
-    }catch (Exception e) {
+    catch (Exception e) {
       logger.log(Level.WARNING, "Error sending to websocket", e);
     }
   } 
-
+  }
   /**
    * Called if the API call throws an error.
    */
