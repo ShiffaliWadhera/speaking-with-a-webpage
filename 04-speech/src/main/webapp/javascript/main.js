@@ -255,7 +255,9 @@
      */
     function onTranscription(e) {
       var result = JSON.parse(e.data);
-      alert(e.data);
+      if (result.fulfillmentText) {
+        transcript.current.innerHTML =  result.fulfillmentText;
+      }      
 //       if (result.alternatives_) {
 //         transcript.current.innerHTML = result.alternatives_[0].transcript_;
 //       }
