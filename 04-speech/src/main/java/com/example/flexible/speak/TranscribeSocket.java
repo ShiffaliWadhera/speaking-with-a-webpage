@@ -198,11 +198,15 @@ public class TranscribeSocket extends WebSocketAdapter
         	int index3 = result2.indexOf("queryText");
         	int index4 = result2.indexOf("action");
         	fulresp = result2.substring(index1+19, index2);
-        	quText = result2.substring(index3+13, index4);
-        	logger.info("Fulfillment response: " + fulresp);
-        	getRemote().sendString(gson.toJson(quText));
-        	getRemote().sendString(gson.toJson(fulresp));
+        	quText = result2.substring(index3+13, index4);       	
+        	
         }
+        
+        logger.info("Fulfillment response: " + fulresp);
+        logger.info("Query Text: " + fulresp);
+        
+        getRemote().sendString(gson.toJson(quText));
+    	getRemote().sendString(gson.toJson(fulresp));
 //        getRemote().sendString(gson.toJson(result));
 //        getRemote().sendString(gson.toJson(fulresp)); 
         
