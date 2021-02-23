@@ -150,18 +150,18 @@ public class TranscribeSocket extends WebSocketAdapter
    
 //    StreamingRecognizeResponse result = results.getResultsList.get(0);
     StreamingRecognitionResult result = results.get(0);
-    logger.info("Got result :" + result);
+    
     boolean isfinal = result.getIsFinal();
     String transcript = result.getAlternatives(0).getTranscript();
     
     
     if (isfinal==true)
     {    
-    	logger.info("Transcript : " + transcript);    
+    	logger.info("Got result :" + result);
+        logger.info("Transcript : " + transcript);    
 
     try { 
-      getRemote().sendString(gson.toJson(result));
-      //getRemote().sendString(transcript);
+      getRemote().sendString(gson.toJson(result));      
       JSONObject innerObject1 = new JSONObject();
       innerObject1.put("text", transcript);
       innerObject1.put("language_code", "en-US");
