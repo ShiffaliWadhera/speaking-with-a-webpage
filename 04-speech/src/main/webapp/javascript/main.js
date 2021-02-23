@@ -262,7 +262,11 @@
         transcript.current = document.createElement('div');
         transcript.el.appendChild(transcript.current);
         
-      }      
+      } else {
+       transcript.current.innerHTML =  "abcd"; 
+       transcript.current = document.createElement('div');
+       transcript.el.appendChild(transcript.current);
+      }
 //       if (result.alternatives_) {
 //         transcript.current.innerHTML = result.alternatives_[0].transcript_;
 //       }
