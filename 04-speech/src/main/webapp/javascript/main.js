@@ -256,7 +256,11 @@
     function onTranscription(e) {
       var result = JSON.parse(e.data);
       if (result.fulfillmentText) {
+        alert(result.fulfillmentText);
         transcript.current.innerHTML =  result.fulfillmentText;
+        transcript.current = document.createElement('div');
+        transcript.el.appendChild(transcript.current);
+        
       }      
 //       if (result.alternatives_) {
 //         transcript.current.innerHTML = result.alternatives_[0].transcript_;
