@@ -152,8 +152,6 @@ public class TranscribeSocket extends WebSocketAdapter
   @Override
   public void onNext(StreamingRecognizeResponse response) {
    String token = System.getProperty("token");
-   String fulresp = "";
-   String quText = "";
     List<StreamingRecognitionResult> results = response.getResultsList();
     if (results.size() < 1) {
       return;
@@ -190,25 +188,8 @@ public class TranscribeSocket extends WebSocketAdapter
         HttpEntity entity1 = res.getEntity();
         String result2 = EntityUtils.toString(entity1);
         
-        logger.info("Dialogflow response: " + result2);
-        if (result2.contains("account.balance.check"))
-        {
-        	int index1 = result2.indexOf("fulfillmentText");
-        	int index2 = result2.indexOf("fulfillmentMessages");
-        	int index3 = result2.indexOf("queryText");
-        	int index4 = result2.indexOf("action");
-        	fulresp = result2.substring(index1+19, index2);
-        	quText = result2.substring(index3+13, index4);       	
-        	
-        }
-        
-        logger.info("Fulfillment response: " + fulresp);
-        logger.info("Query Text: " + fulresp);
-        
-        getRemote().sendString(gson.toJson(quText));
-    	getRemote().sendString(gson.toJson(fulresp));
-//        getRemote().sendString(gson.toJson(result));
-//        getRemote().sendString(gson.toJson(fulresp)); 
+        logger.info("Dialogflow response: " + result2);       
+        getRemote().sendString(gson.toJson(result));       
         
       } catch (IOException e) {
         logger.log(Level.WARNING, "Error sending to websocket", e);
