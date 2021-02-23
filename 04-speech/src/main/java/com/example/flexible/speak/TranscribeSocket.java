@@ -161,7 +161,7 @@ public class TranscribeSocket extends WebSocketAdapter
 
     try {     
       
-      
+      getRemote().sendString(gson.toJson(transcript));
       JSONObject innerObject1 = new JSONObject();
       innerObject1.put("text", transcript);
       innerObject1.put("language_code", "en-US");
@@ -189,8 +189,16 @@ public class TranscribeSocket extends WebSocketAdapter
         String result2 = EntityUtils.toString(entity1);
         
         logger.info("Dialogflow response: " + result2);
+           
 
-        getRemote().sendString(gson.toJson(transcript));
+        JSONTokener tokener = new JSONTokener(result2);
+        JSONObject object = new JSONObject(tokener);
+        JSONObject qresult = object.getJSONObject("queryResult");       
+        
+        logger.info("fulfillmentText  : " + qresult.getString("fulfillmentText"));   
+        
+
+        
       } catch (IOException e) {
         logger.log(Level.WARNING, "Error sending to websocket", e);
       }
