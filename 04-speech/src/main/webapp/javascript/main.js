@@ -255,6 +255,7 @@
      */
     function onTranscription(e) {
       var result = JSON.parse(e.data);
+      alert(result);
       if (result.fulfillmentText) {
         alert(result.fulfillmentText);
         transcript.current.innerHTML =  result.fulfillmentText;
