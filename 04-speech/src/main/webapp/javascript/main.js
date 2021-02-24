@@ -229,6 +229,13 @@
 
       }).catch(console.log.bind(console));
     }
+    
+    function synthVoice(text) {
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance();
+      utterance.text = text;
+      synth.speak(utterance);
+    }
 
     function closeWebsocket() {
       scriptNode.disconnect();
@@ -261,6 +268,7 @@
         transcript.current = document.createElement('div');
         transcript.el.appendChild(transcript.current);        
       } 
+      synthVoice(disText.fulfillmentText);
 //       if (result.alternatives_) {
 //         transcript.current.innerHTML = result.alternatives_[0].transcript_;
 //       }
