@@ -256,9 +256,9 @@
     function onTranscription(e) {
       var result = JSON.parse(e.data);
       alert(result);
-      if (result.fulfillmentText_) {
+      if (result.fulfillmentText\) {
         alert("going maddddd....");
-        transcript.current.innerHTML =  result.fulfillmentText_;
+        transcript.current.innerHTML =  result.fulfillmentText\;
         transcript.current = document.createElement('div');
         transcript.el.appendChild(transcript.current);
         
