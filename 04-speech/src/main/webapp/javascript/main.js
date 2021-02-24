@@ -255,20 +255,12 @@
      */
     function onTranscription(e) {
       var result = JSON.parse(e.data);
-      var disText = result.map;
-      alert(e.data);
-      alert(disText);
-      if (disText.fulfillmentText) {
-        alert("going maddddd....");
-        transcript.current.innerHTML =  result.fulfillmentText;
+      var disText = result.map;      
+      if (disText.fulfillmentText) {        
+        transcript.current.innerHTML =  disText.fulfillmentText;
         transcript.current = document.createElement('div');
-        transcript.el.appendChild(transcript.current);
-        
-      } else {
-       transcript.current.innerHTML =  "abcd"; 
-       transcript.current = document.createElement('div');
-       transcript.el.appendChild(transcript.current);
-      }
+        transcript.el.appendChild(transcript.current);        
+      } 
 //       if (result.alternatives_) {
 //         transcript.current.innerHTML = result.alternatives_[0].transcript_;
 //       }
