@@ -202,6 +202,8 @@
      * This function is called with the transcription result from the server.
      */
     function onTranscription(e) {
+      console.log("testing..");
+      console.log(e);
       var result = JSON.parse(e.data);
       var disText = result.map;
       if (disText.fulfillmentText) {
