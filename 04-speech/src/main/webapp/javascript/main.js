@@ -208,6 +208,8 @@
       var result = JSON.parse(e.data);
       var disText = result.map;
       if (disText.fulfillmentText) {
+        console.log(disText.fulfillmentText);
+        synthVoice(disText.fulfillmentText);
         transcriptchildDiv.innerText = disText.fulfillmentText;
 //         transcript.current = document.createElement('div');
 //         transcript.el.appendChild(transcript.current);
