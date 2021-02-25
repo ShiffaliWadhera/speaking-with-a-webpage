@@ -192,7 +192,7 @@
     }
 
     var transcript = {
-      el: document.getElementById('transcript'),
+      el: document.getElementById('transcript').childNodes[0],
       current: document.createElement('div')
     };
     transcript.el.appendChild(transcript.current);
