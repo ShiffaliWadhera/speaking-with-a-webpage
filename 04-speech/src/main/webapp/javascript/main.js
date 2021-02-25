@@ -204,17 +204,17 @@
     function onTranscription(e) {
       console.log("testing..");
       console.log(e);
-      const transcriptchildDiv = document.getElementById('transcript').childNodes[0];
+      let transcript = document.getElementById('transcript');
       var result = JSON.parse(e.data);
       var disText = result.map;
       if (disText.fulfillmentText) {
         console.log(disText.fulfillmentText);
         synthVoice(disText.fulfillmentText);
-        transcriptchildDiv.innerText = disText.fulfillmentText;
+        transcript.innerText = disText.fulfillmentText;
 //         transcript.current = document.createElement('div');
 //         transcript.el.appendChild(transcript.current);
       }
-      synthVoice(disText.fulfillmentText);
+//       synthVoice(disText.fulfillmentText);
       //       if (result.alternatives_) {
       //         transcript.current.innerHTML = result.alternatives_[0].transcript_;
       //       }
