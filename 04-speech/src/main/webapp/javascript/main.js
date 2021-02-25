@@ -191,10 +191,10 @@
       }
     }
 
-    var transcript = {
-      el: document.getElementById('transcript').childNodes[0],      
-      current: document.createElement('div')
-    };
+//     var transcript = {
+//       el: document.getElementById('transcript').childNodes[0],      
+//       current: document.createElement('div')
+//     };
 //     alert(transcript);
 //     alert(transcript.e1);
 //     transcript.el.appendChild(transcript.current);
@@ -204,7 +204,7 @@
     function onTranscription(e) {
       console.log("testing..");
       console.log(e);
-      let transcript = document.getElementById('transcript');
+      var transcript = document.getElementById('transcript');
       var result = JSON.parse(e.data);
       var disText = result.map;
       if (disText.fulfillmentText) {
