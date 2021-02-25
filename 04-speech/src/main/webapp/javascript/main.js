@@ -195,9 +195,9 @@
       el: document.getElementById('transcript').childNodes[0],      
       current: document.createElement('div')
     };
-    alert(transcript);
-    alert(transcript.e1);
-    transcript.el.appendChild(transcript.current);
+//     alert(transcript);
+//     alert(transcript.e1);
+//     transcript.el.appendChild(transcript.current);
     /**
      * This function is called with the transcription result from the server.
      */
