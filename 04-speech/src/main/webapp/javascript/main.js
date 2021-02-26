@@ -209,6 +209,10 @@
       var disText = result.map;
       if (disText.fulfillmentText) {
         console.log(disText.fulfillmentText);
+        if(disText.fulfillmentText.includes("goodbye")){
+          closeWebsocket();
+          $('#exampleModal').modal('hide');
+        }
         synthVoice(disText.fulfillmentText);
         transcript.innerText = disText.fulfillmentText;
 //         transcript.current = document.createElement('div');
