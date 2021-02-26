@@ -205,17 +205,17 @@
       console.log("testing..");
       console.log(e);
       var transcript = document.getElementById('transcript');
-      var closeBut = document.getElementById('close-modal-button');
+//       var closeBut = document.getElementById('close-modal-button');
       var result = JSON.parse(e.data);
       var disText = result.map;
       if (disText.fulfillmentText) {
         console.log(disText.fulfillmentText);
         synthVoice(disText.fulfillmentText);
         transcript.innerText = disText.fulfillmentText;
-        if(disText.fulfillmentText.includes("goodbye")){
-          closeWebsocket();
-          closeBut.click();
-        }
+//         if(disText.fulfillmentText.includes("goodbye")){
+//           closeWebsocket();
+//           closeBut.click();
+//         }
 //         transcript.current = document.createElement('div');
 //         transcript.el.appendChild(transcript.current);
       }
